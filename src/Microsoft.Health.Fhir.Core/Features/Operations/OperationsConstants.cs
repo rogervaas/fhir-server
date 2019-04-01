@@ -5,10 +5,10 @@
 
 namespace Microsoft.Health.Fhir.Core.Features.Operations
 {
-    public static class Constants
+    public static class OperationsConstants
     {
         public const string Operations = "_operations";
 
-        public const string ExportName = "export";
+        public const string Export = "export";
     }
 }

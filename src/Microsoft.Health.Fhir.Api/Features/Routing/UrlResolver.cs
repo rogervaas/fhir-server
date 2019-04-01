@@ -182,9 +182,9 @@ namespace Microsoft.Health.Fhir.Api.Features.Routing
             EnsureArg.IsNotNullOrEmpty(operationName, nameof(operationName));
             EnsureArg.IsNotNullOrEmpty(id, nameof(id));
 
-            if (!string.Equals(operationName, Constants.ExportName, StringComparison.OrdinalIgnoreCase))
+            if (!string.Equals(operationName, OperationsConstants.Export, StringComparison.OrdinalIgnoreCase))
             {
-                throw new OperationNotImplementedException(Resources.NotImplemented);
+                throw new OperationNotImplementedException(string.Format(Resources.OperationNotImplemented, operationName));
             }
 
             var routeValues = new RouteValueDictionary()

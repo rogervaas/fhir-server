@@ -6,8 +6,8 @@
 namespace Microsoft.Health.Fhir.Core.Features.Operations
 {
     /// <summary>
-    /// Class for storing the names for the different json properties that will be
-    /// stored for each job record. Some of these will be common across different operations
+    /// Class for keeping track of the different json properties that will be stored
+    /// for each job record. Some of these will be common across different operations
     /// and others might be specific.
     /// </summary>
     public static class JobRecordProperties

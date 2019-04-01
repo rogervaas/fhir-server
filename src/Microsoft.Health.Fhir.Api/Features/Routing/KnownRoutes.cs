@@ -3,7 +3,7 @@
 // Licensed under the MIT License (MIT). See LICENSE in the repo root for license information.
 // -------------------------------------------------------------------------------------------------
 
-using OperationsConstants = Microsoft.Health.Fhir.Core.Features.Operations.Constants;
+using OperationsConstants = Microsoft.Health.Fhir.Core.Features.Operations.OperationsConstants;
 
 namespace Microsoft.Health.Fhir.Api.Features.Routing
 {
@@ -31,8 +31,7 @@ namespace Microsoft.Health.Fhir.Api.Features.Routing
         public const string Export = "$export";
         public const string ExportResourceType = ResourceType + "/" + Export;
         public const string ExportResourceTypeById = ResourceTypeById + "/" + Export;
-
-        public const string ExportStatusById = OperationsConstants.Operations + "/" + OperationsConstants.ExportName + "/" + IdRouteSegment;
+        public const string ExportStatusById = OperationsConstants.Operations + "/" + OperationsConstants.Export + "/" + IdRouteSegment;
 
         public const string CompartmentTypeByResourceType = CompartmentTypeRouteSegment + "/" + IdRouteSegment + "/" + CompartmentResourceTypeRouteSegment;
 

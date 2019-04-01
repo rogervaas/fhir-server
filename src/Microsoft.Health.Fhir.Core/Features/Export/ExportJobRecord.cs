@@ -21,6 +21,7 @@ namespace Microsoft.Health.Fhir.Core.Features.Export
             Request = exportRequest;
             JobSchemaVersion = jobSchemaVersion;
 
+            // Default values
             JobStatus = ExportJobStatus.Queued;
             Id = Guid.NewGuid().ToString();
             QueuedTime = DateTimeOffset.Now;

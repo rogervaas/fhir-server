@@ -101,9 +101,6 @@ namespace Microsoft.Health.Fhir.Api.Controllers
             var fhirResult = FhirResult.Create(outcome, responseCode);
             fhirResult.SetContentLocationHeader(_urlResolver, "export", response.Id);
 
-            // string contentLocation = Request.Host + "/_operations/export/" + response.Id;
-            // fhirResult.Headers.Add(HeaderNames.ContentLocation, contentLocation);
-
             return fhirResult;
         }
 
@@ -155,7 +152,7 @@ namespace Microsoft.Health.Fhir.Api.Controllers
                 throw new RequestNotValidException(string.Format(Resources.UnsupportedOperation, "Export"));
             }
 
-            throw new OperationNotImplementedException(Resources.NotImplemented);
+            throw new OperationNotImplementedException(string.Format(Resources.OperationNotImplemented, "Export"));
         }
     }
 }

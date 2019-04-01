@@ -65,7 +65,7 @@ namespace Microsoft.Health.Fhir.Api.Features.Headers
             return fhirResult;
         }
 
-        // Generates the url to be included in the response based on the operation and set's the content location header.
+        // Generates the url to be included in the response based on the operation and sets the content location header.
         public static FhirResult SetContentLocationHeader(this FhirResult fhirResult, IUrlResolver urlResolver, string operationName, string id)
         {
             EnsureArg.IsNotNullOrEmpty(operationName, nameof(operationName));
