@@ -10,9 +10,9 @@ using Newtonsoft.Json;
 
 namespace Microsoft.Health.Fhir.Core.Messages.Export
 {
-    public class ExportRequest : IRequest<ExportResponse>
+    public class CreateExportRequest : IRequest<CreateExportResponse>
     {
-        public ExportRequest(Uri requestUri)
+        public CreateExportRequest(Uri requestUri)
         {
             EnsureArg.IsNotNull(requestUri, nameof(requestUri));
 

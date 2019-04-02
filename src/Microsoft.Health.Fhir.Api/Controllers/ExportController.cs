@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.Health.Abstractions.Exceptions;
 using Microsoft.Health.Fhir.Api.Features.ActionResults;
 using Microsoft.Health.Fhir.Api.Features.Audit;
 using Microsoft.Health.Fhir.Api.Features.Filters;
@@ -22,6 +23,7 @@ using Microsoft.Health.Fhir.Core.Configs;
 using Microsoft.Health.Fhir.Core.Exceptions;
 using Microsoft.Health.Fhir.Core.Extensions;
 using Microsoft.Health.Fhir.Core.Features.Context;
+using Microsoft.Health.Fhir.Core.Features.Operations;
 using Microsoft.Health.Fhir.Core.Features.Routing;
 using Microsoft.Health.Fhir.Core.Messages.Export;
 using Microsoft.Health.Fhir.ValueSets;
@@ -81,25 +83,24 @@ namespace Microsoft.Health.Fhir.Api.Controllers
                 throw new RequestNotValidException(string.Format(Resources.UnsupportedOperation, "Export"));
             }
 
-            ExportResponse response = await _mediator.ExportAsync(_fhirRequestContextAccessor.FhirRequestContext.Uri);
+            CreateExportResponse response = await _mediator.ExportAsync(_fhirRequestContextAccessor.FhirRequestContext.Uri);
 
             HttpStatusCode responseCode;
-            if (response.ExportJobQueued)
+            if (response.JobStatus.Equals(JobCreationStatus.Failed))
             {
-                responseCode = HttpStatusCode.Accepted;
+                responseCode = HttpStatusCode.InternalServerError;
+                throw new MicrosoftHealthException(Resources.GeneralInternalError);
             }
             else
             {
-                responseCode = HttpStatusCode.InternalServerError;
+                responseCode = HttpStatusCode.Accepted;
             }
 
-            OperationOutcome outcome = new OperationOutcome()
+            var fhirResult = new FhirResult()
             {
-                Id = _fhirRequestContextAccessor.FhirRequestContext.CorrelationId,
+                StatusCode = responseCode,
             };
-
-            var fhirResult = FhirResult.Create(outcome, responseCode);
-            fhirResult.SetContentLocationHeader(_urlResolver, "export", response.Id);
+            fhirResult.SetContentLocationHeader(_urlResolver, OperationsConstants.Export, response.Id);
 
             return fhirResult;
         }

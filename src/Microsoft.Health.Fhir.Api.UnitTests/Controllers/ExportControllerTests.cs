@@ -35,15 +35,23 @@ namespace Microsoft.Health.Fhir.Api.UnitTests.Controllers
         }
 
         [Fact]
-        public async void GivenAnExportRequest_WhenEnabled_ThenNotImplementedResponseShouldBeReturned()
+        public async void GivenAnExportRequest_WhenRequestFails_ThenInternalServerErrorShouldBeReturned()
         {
+            IFhirRequestContextAccessor fhirRequestContextAccessor = Substitute.For<IFhirRequestContextAccessor>();
+            fhirRequestContextAccessor.FhirRequestContext.Uri.Returns(new System.Uri("uri string"));
+
+            IMediator mediator = Substitute.For<IMediator>();
+
+            // mediator.ExportAsync().Returns
+
+            // var exportController = GetController(new Ex)
             await Assert.ThrowsAsync<OperationNotImplementedException>(() => _exportEnabledController.Export());
         }
 
         [Fact]
         public void GivenAnExportByResourceTypeRequest_WhenResourceTypeIsNotPatient_ThenRequestNotValidExceptionShouldBeThrown()
         {
-            Assert.Throws<RequestNotValidException>(() => _exportEnabledController.ExportResourceType("Observation"));
+            Assert.Throws<RequestNotValidException>(() => _exportEnabledController.ExportResourceType(ResourceType.Observation.ToString()));
         }
 
         [Fact]
@@ -55,7 +63,7 @@ namespace Microsoft.Health.Fhir.Api.UnitTests.Controllers
         [Fact]
         public void GivenAnExportResourceTypeIdRequest_WhenResourceTypeIsNotGroup_ThenRequestNotValidExceptionShouldBeThrown()
         {
-            Assert.Throws<RequestNotValidException>(() => _exportEnabledController.ExportResourceTypeById("Patient", "id"));
+            Assert.Throws<RequestNotValidException>(() => _exportEnabledController.ExportResourceTypeById(ResourceType.Patient.ToString(), "id"));
         }
 
         [Fact]
@@ -64,7 +72,11 @@ namespace Microsoft.Health.Fhir.Api.UnitTests.Controllers
            Assert.Throws<OperationNotImplementedException>(() => _exportEnabledController.ExportResourceTypeById(ResourceType.Group.ToString(), "id"));
         }
 
-        private ExportController GetController(ExportConfiguration exportConfig)
+        private ExportController GetController(
+            ExportConfiguration exportConfig,
+            IMediator mediator = null,
+            IFhirRequestContextAccessor fhirRequestContextAccessor = null,
+            IUrlResolver urlResolver = null)
         {
             var operationConfig = new OperationsConfiguration()
             {
@@ -75,9 +87,9 @@ namespace Microsoft.Health.Fhir.Api.UnitTests.Controllers
             optionsOperationConfiguration.Value.Returns(operationConfig);
 
             return new ExportController(
-                Substitute.For<IMediator>(),
-                Substitute.For<IFhirRequestContextAccessor>(),
-                Substitute.For<IUrlResolver>(),
+                mediator ?? Substitute.For<IMediator>(),
+                fhirRequestContextAccessor ?? Substitute.For<IFhirRequestContextAccessor>(),
+                urlResolver ?? Substitute.For<IUrlResolver>(),
                 optionsOperationConfiguration,
                 NullLogger<ExportController>.Instance);
         }

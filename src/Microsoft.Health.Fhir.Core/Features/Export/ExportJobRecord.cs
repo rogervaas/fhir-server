@@ -13,7 +13,7 @@ namespace Microsoft.Health.Fhir.Core.Features.Export
 {
     public class ExportJobRecord
     {
-        public ExportJobRecord(ExportRequest exportRequest, int jobSchemaVersion)
+        public ExportJobRecord(CreateExportRequest exportRequest, int jobSchemaVersion)
         {
             EnsureArg.IsNotNull(exportRequest, nameof(exportRequest));
             EnsureArg.IsGt(jobSchemaVersion, 0, nameof(jobSchemaVersion));
@@ -22,7 +22,7 @@ namespace Microsoft.Health.Fhir.Core.Features.Export
             JobSchemaVersion = jobSchemaVersion;
 
             // Default values
-            JobStatus = ExportJobStatus.Queued;
+            JobStatus = OperationStatus.Queued;
             Id = Guid.NewGuid().ToString();
             QueuedTime = DateTimeOffset.Now;
             LastModifiedTime = DateTimeOffset.Now;
@@ -34,7 +34,7 @@ namespace Microsoft.Health.Fhir.Core.Features.Export
         }
 
         [JsonProperty(JobRecordProperties.Request)]
-        public ExportRequest Request { get; }
+        public CreateExportRequest Request { get; }
 
         [JsonProperty(JobRecordProperties.Id)]
         public string Id { get; }
@@ -55,7 +55,7 @@ namespace Microsoft.Health.Fhir.Core.Features.Export
         public ExportJobOutput Output { get; } = new ExportJobOutput();
 
         [JsonProperty(JobRecordProperties.JobStatus)]
-        public ExportJobStatus JobStatus { get; set; }
+        public OperationStatus JobStatus { get; set; }
 
         [JsonProperty(JobRecordProperties.LastModified)]
         public DateTimeOffset LastModifiedTime { get; set; }
