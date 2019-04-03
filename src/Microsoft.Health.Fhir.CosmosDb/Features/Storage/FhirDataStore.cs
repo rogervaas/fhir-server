@@ -227,6 +227,23 @@ namespace Microsoft.Health.Fhir.CosmosDb.Features.Storage
             return GetJobCreationStatus(result.StatusCode);
         }
 
+        public async Task<ExportJobRecord> GetExportJobAsync(string jobId, CancellationToken cancellationToken = default)
+        {
+            EnsureArg.IsNotNullOrEmpty(jobId);
+
+            try
+            {
+                return await _documentClient.ReadDocumentAsync<ExportJobRecord>(
+                    UriFactory.CreateDocumentUri(_cosmosDataStoreConfiguration.DatabaseId, _collectionConfiguration.CollectionId, jobId),
+                    new RequestOptions { PartitionKey = new PartitionKey(OperationsConstants.ExportJobPartitionKey) },
+                    cancellationToken);
+            }
+            catch (DocumentClientException e) when (e.StatusCode == HttpStatusCode.NotFound)
+            {
+                return null;
+            }
+        }
+
         private JobCreationStatus GetJobCreationStatus(HttpStatusCode httpStatus)
         {
             switch (httpStatus)

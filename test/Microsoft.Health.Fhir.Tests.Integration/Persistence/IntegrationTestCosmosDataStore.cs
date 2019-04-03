@@ -118,5 +118,10 @@ namespace Microsoft.Health.Fhir.Tests.Integration.Persistence
         {
             return await _dataStore.UpsertExportJobAsync(jobRecord, cancellationToken);
         }
+
+        public async Task<ExportJobRecord> GetExportJobAsync(string jobId, CancellationToken cancellationToken = default)
+        {
+            return await _dataStore.GetExportJobAsync(jobId, cancellationToken);
+        }
     }
 }

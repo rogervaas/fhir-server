@@ -137,9 +137,31 @@ namespace Microsoft.Health.Fhir.Api.Controllers
 
         [HttpGet]
         [Route(KnownRoutes.ExportStatusById, Name = RouteNames.GetExportStatusById)]
-        public IActionResult GetExportStatusById(string id)
+        public async Task<IActionResult> GetExportStatusById(string id)
         {
-            throw new NotImplementedException();
+            var result = await _mediator.GetExportAsync(_fhirRequestContextAccessor.FhirRequestContext.Uri, id);
+
+            if (!result.JobExists)
+            {
+                throw new ResourceNotFoundException(Resources.NotFoundException);
+            }
+
+            HttpStatusCode responseCode;
+            if (result.JobStatus.Equals(OperationStatus.Completed))
+            {
+                responseCode = HttpStatusCode.OK;
+            }
+            else
+            {
+                responseCode = HttpStatusCode.Accepted;
+            }
+
+            var fhirResult = new FhirResult()
+            {
+                StatusCode = responseCode,
+            };
+
+            return fhirResult;
         }
 
         /// <summary>

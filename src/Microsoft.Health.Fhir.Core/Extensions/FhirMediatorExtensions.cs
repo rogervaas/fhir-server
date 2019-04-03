@@ -128,8 +128,17 @@ namespace Microsoft.Health.Fhir.Core.Extensions
 
             var request = new CreateExportRequest(requestUri);
 
-            var response = await mediator.Send(request, cancellationToken);
-            return response;
+            return await mediator.Send(request, cancellationToken);
+        }
+
+        public static async Task<GetExportResponse> GetExportAsync(this IMediator mediator, Uri requestUri, string jobId, CancellationToken cancellationToken = default)
+        {
+            EnsureArg.IsNotNull(requestUri, nameof(requestUri));
+            EnsureArg.IsNotNullOrEmpty(jobId, nameof(jobId));
+
+            var request = new GetExportRequest(requestUri, jobId);
+
+            return await mediator.Send(request, cancellationToken);
         }
     }
 }

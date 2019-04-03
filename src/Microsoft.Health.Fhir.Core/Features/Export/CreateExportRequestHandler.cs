@@ -12,11 +12,11 @@ using Microsoft.Health.Fhir.Core.Messages.Export;
 
 namespace Microsoft.Health.Fhir.Core.Features.Export
 {
-    public class ExportRequestHandler : IRequestHandler<CreateExportRequest, CreateExportResponse>
+    public class CreateExportRequestHandler : IRequestHandler<CreateExportRequest, CreateExportResponse>
     {
         private IDataStore _dataStore;
 
-        public ExportRequestHandler(IDataStore dataStore)
+        public CreateExportRequestHandler(IDataStore dataStore)
         {
             EnsureArg.IsNotNull(dataStore, nameof(dataStore));
 

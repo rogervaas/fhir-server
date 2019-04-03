@@ -123,5 +123,15 @@ namespace Microsoft.Health.Fhir.Core.Features.Persistence.InMemory
             ExportJobData.Add(jobRecord.Id, jobRecord);
             return Task.FromResult(JobCreationStatus.Created);
         }
+
+        public Task<ExportJobRecord> GetExportJobAsync(string jobId, CancellationToken cancellationToken = default)
+        {
+            EnsureArg.IsNotNullOrEmpty(jobId);
+
+            ExportJobRecord jobRecord = null;
+            ExportJobData.TryGetValue(jobId, out jobRecord);
+
+            return Task.FromResult(jobRecord);
+        }
     }
 }

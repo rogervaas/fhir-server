@@ -16,18 +16,18 @@ using Xunit;
 
 namespace Microsoft.Health.Fhir.Core.UnitTests.Features.Export
 {
-    public class ExportRequestHandlerTests
+    public class CreateExportRequestHandlerTests
     {
         private readonly IDataStore _dataStore;
         private readonly IMediator _mediator;
         private const string RequestUrl = "https://localhost/$export/";
 
-        public ExportRequestHandlerTests()
+        public CreateExportRequestHandlerTests()
         {
             _dataStore = Substitute.For<IDataStore>();
 
             var collection = new ServiceCollection();
-            collection.Add(x => new ExportRequestHandler(_dataStore)).Singleton().AsSelf().AsImplementedInterfaces();
+            collection.Add(x => new CreateExportRequestHandler(_dataStore)).Singleton().AsSelf().AsImplementedInterfaces();
 
             ServiceProvider provider = collection.BuildServiceProvider();
             _mediator = new Mediator(type => provider.GetService(type));
