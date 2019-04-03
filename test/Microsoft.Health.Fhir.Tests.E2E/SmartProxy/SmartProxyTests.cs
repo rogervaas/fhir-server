@@ -111,6 +111,8 @@ namespace Microsoft.Health.Fhir.Tests.E2E.SmartProxy
                 driver.FindElementByName("loginfmt").SendKeys(testUserName);
                 Advance();
 
+                Thread.Sleep(TimeSpan.FromMilliseconds(1000));
+
                 driver.FindElementByName("passwd").SendKeys(testUserPassword);
                 Advance();
 
