@@ -139,7 +139,7 @@ namespace Microsoft.Health.Fhir.Api.Controllers
         [Route(KnownRoutes.ExportStatusById, Name = RouteNames.GetExportStatusById)]
         public async Task<IActionResult> GetExportStatusById(string id)
         {
-            var result = await _mediator.GetExportAsync(_fhirRequestContextAccessor.FhirRequestContext.Uri, id);
+            var result = await _mediator.GetExportStatusAsync(_fhirRequestContextAccessor.FhirRequestContext.Uri, id);
 
             if (!result.JobExists)
             {
