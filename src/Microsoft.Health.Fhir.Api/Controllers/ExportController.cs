@@ -86,14 +86,14 @@ namespace Microsoft.Health.Fhir.Api.Controllers
             CreateExportResponse response = await _mediator.ExportAsync(_fhirRequestContextAccessor.FhirRequestContext.Uri);
 
             HttpStatusCode responseCode;
-            if (response.JobStatus.Equals(JobCreationStatus.Failed))
+            if (response.JobCreated)
             {
-                responseCode = HttpStatusCode.InternalServerError;
-                throw new MicrosoftHealthException(Resources.GeneralInternalError);
+                responseCode = HttpStatusCode.Accepted;
             }
             else
             {
-                responseCode = HttpStatusCode.Accepted;
+                responseCode = HttpStatusCode.InternalServerError;
+                throw new MicrosoftHealthException(Resources.GeneralInternalError);
             }
 
             var fhirResult = new FhirResult()

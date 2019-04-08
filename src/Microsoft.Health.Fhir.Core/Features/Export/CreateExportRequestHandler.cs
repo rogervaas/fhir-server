@@ -27,10 +27,22 @@ namespace Microsoft.Health.Fhir.Core.Features.Export
         {
             EnsureArg.IsNotNull(request, nameof(request));
 
-            var jobRecord = new ExportJobRecord(request, 1);
-            var jobCreationResult = await _dataStore.UpsertExportJobAsync(jobRecord, cancellationToken);
+            // TODO: Later we will add some logic here that will check whether a duplucate job already exists
+            // and handle it accordingly. For now we just assume all export jobs are unique and create a new one.
 
-            return new CreateExportResponse(jobRecord.Id, jobCreationResult);
+            var jobRecord = new ExportJobRecord(request, 1);
+            var responseCode = await _dataStore.UpsertExportJobAsync(jobRecord, cancellationToken);
+
+            // Upsert returns http Created for new documents and http OK if it updated an existing document.
+            // We expect the former in this scenario.
+            if (responseCode == System.Net.HttpStatusCode.Created)
+            {
+                return new CreateExportResponse(jobRecord.Id, true);
+            }
+            else
+            {
+                return new CreateExportResponse(jobRecord.Id, false);
+            }
         }
     }
 }

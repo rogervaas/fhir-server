@@ -17,7 +17,6 @@ using Microsoft.Health.Fhir.Core.Exceptions;
 using Microsoft.Health.Fhir.Core.Extensions;
 using Microsoft.Health.Fhir.Core.Features.Conformance;
 using Microsoft.Health.Fhir.Core.Features.Export;
-using Microsoft.Health.Fhir.Core.Features.Operations;
 using Microsoft.Health.Fhir.Core.Features.Persistence;
 using Microsoft.Health.Fhir.Core.Features.Resources.Create;
 using Microsoft.Health.Fhir.Core.Features.Resources.Delete;
@@ -391,7 +390,7 @@ namespace Microsoft.Health.Fhir.Tests.Common.Persistence
             Uri requestUri = new Uri("https://localhost/$export");
             var result = await Mediator.ExportAsync(requestUri);
 
-            Assert.Equal(JobCreationStatus.Created, result.JobStatus);
+            Assert.True(result.JobCreated);
 
             requestUri = new Uri("https://localhost/_operation/export/" + result.Id);
             var exportStatus = await Mediator.GetExportStatusAsync(requestUri, result.Id);

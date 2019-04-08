@@ -4,22 +4,21 @@
 // -------------------------------------------------------------------------------------------------
 
 using EnsureThat;
-using Microsoft.Health.Fhir.Core.Features.Operations;
 
 namespace Microsoft.Health.Fhir.Core.Messages.Export
 {
     public class CreateExportResponse
     {
-        public CreateExportResponse(string id, JobCreationStatus jobCreationStatus)
+        public CreateExportResponse(string id, bool jobCreated)
         {
             EnsureArg.IsNotNullOrEmpty(id, nameof(id));
 
             Id = id;
-            JobStatus = jobCreationStatus;
+            JobCreated = jobCreated;
         }
 
         public string Id { get; }
 
-        public JobCreationStatus JobStatus { get; }
+        public bool JobCreated { get; }
     }
 }
